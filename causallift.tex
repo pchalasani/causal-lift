@@ -376,14 +376,14 @@ We saw in the previous section that ignorability of exposure ensures that the $A
 
 \section{Demand Side Platforms} \label{sec-rtb}
 
-We provide here a simplified view of the mechanisms that the describe the operation of a DSP, as pertains to buying and delivering digital advertising. We will specifically describe the buying mechanism of Real Time Bidding (RTB), but the general principles laid out here apply to any ad-devliery contexts where similar event-level logging (as described below)and data flows exists, and the resulting methodology can be readily applied to those contexts as well. 
+We provide here a simplified view of the mechanisms involved in the operation of a DSP, as pertains to buying and delivering digital advertising. We will specifically describe the buying mechanism of Real Time Bidding (RTB), but the general principles laid out here apply to any ad-delivery contexts where similar event-level logging (as described below) and data flows exist, and the resulting methodology can be readily applied to those contexts as well. 
 %(see Figure \ref{fig-dsp}). - NOTE I KILLED THE FIGURE
 Most free (and some paid) websites and mobile apps depend on advertising for revenue. 
 When a consumer visits a publisher's website or mobile app, this becomes an {\emph opportunity} to display an ad to the consumer. The publisher sends this opportunity to one or more ad exchanges or SSPs (which we will simply refer to collectively as "exchanges").
 The ad exchange then sends these opportunities, also known as bid opportunities or "bid requests," along with associated data about the request, to various DSPs, whose clients are advertisers (or their agencies) that compete to win the opportunity. 
-The bid request can be viewed as a tuple containing several fields, and in our present context the only ones that matters are $(u, r, e)$ where:
+The bid request can be viewed as a tuple containing several fields, and in our present context the only ones that matter are $(u, r, e)$ where:
 \begin{itemize}
-	\item $u$ is the {\bf userID}. For example, this could be a cookie ID from a web browser, or a mobile advertising ID from a mobile app. 
+	\item $u$ is the {\bf userID}. For example, this could be a cookie ID from a web browser, or a mobile advertising ID (or "deviceID" in brief) from a mobile app. 
 	\item $r$ is the {\bf bid request ID}, which uniquely identifies the bid request, and we can imagine that all information needed to serve the ad will be attached to the bid request ID.
 	\item $e$ is the {\bf exchange ID} from which the bid request originated.
 \end{itemize}
@@ -400,7 +400,7 @@ The bid request can be viewed as a tuple containing several fields, and in our p
 %ARI KILLED IT, BUT IF YOU WANT TO INCLUDE, LET'S FIX IT TOGETHER
 
 A DSP typically has hundreds or thousands of clients (advertisers) on whose behalf it submits bids throughout the day. 
-However in response to a given bid request, only a subset advertisers may be eligible to bid due to several factors such as: (a) advertisers' targeting requirements, i.e., the types of consumers they want to reach, the contexts in which they want to reach them, etc. (b) governing campaign criteria such as the available budget and desired frequency of exposure, or (c) publisher restrictions on which types of advertisers they will accept. 
+However in response to a given bid request, only a subset of advertisers may be eligible to bid due to several factors such as: (a) advertisers' targeting requirements, i.e., the types of consumers they want to reach, the contexts in which they want to reach them, etc. (b) governing campaign criteria such as the available budget and desired frequency of exposure, or (c) publisher restrictions on which types of advertisers they will accept. 
 The DSP therefore needs to conduct what we will refer to generically as a {\em matching/targeting} process to arrive at a short list of advertiser campaigns eligible to submit a bid. 
 
 If the DSP determines there are one or more eligible advertiser campaigns, it must then determine the appropriate price to bid for the impression in question on behalf of the eligible campaign(s). Determination of the optimal bid price to submit is an interesting problem in its own right, but we ignore the details of the bid determination process here. 
@@ -408,7 +408,8 @@ If the DSP determines there are one or more eligible advertiser campaigns, it mu
 Since the DSP typically can only submit one bid to the exchange (though there are exceptions, which we ignore here because it is orthogonal to the methodologies we describe), it will need to determine: (a) which of the eligible clients (if any) gets to submit a bid, and (b) how much it should bid. This process typically involves determining each eligible advertiser's "optimal" bid price, and picking the one with the greatest optimal bid price.
 Determination of the optimal bid price is often the result of a combination of ML-based predictions of the probability that viewing the ad leads to the desired consumer response (site visit, purchase, etc.), called the predicted conversion rate (CVR). We ignore details of the bid-determination process; 
 \fi
-For our present purpose the only relevant aspect is that it is either empty (for example if no ad campaigns are eligible) or results in a {\bf bid submission} tuple which we can think of as containing the bid-request tuple $(u,r,e,c,b)$ which contains the entries $u,r,e$ from the bid request, plus two additional entries $c,b$ where:
+For our present purpose the only relevant aspect of the result of the optimal bid price determination process is that it is either empty (for example if no ad campaigns are eligible) or it is a {\bf bid submission} tuple 
+$(u,r,e,c,b)$ which contains the entries $u,r,e$ from the bid request, plus two additional entries $c,b$ where:
 \begin{itemize}
 	\item $c$ is the {\bf campaign ID} on behalf of which the bid is submitted. Note that the campaign ID implies a unique advertiser ID; each advertiser typically runs a collection of campaigns, each with its own unique ID. 
 	\item $b$ is the {\bf bid amount}, denominated in some monetary currency.
@@ -418,23 +419,23 @@ We will treat the combination of matching/targeting and bid-determination as a b
 $(u,r,e)$ and the output is either empty or a bid-submission tuple  
 $(u,r,e,c,b)$ that is sent to the exchange $e$ from which the bid request was received. 
 
-There would in general course be several other entities (e.g., multiple DSPs) bidding for the same bid request $r$ from the exchange $e$, and the exchange conducts an auction to determine the winner. The auction process is a black box for our purposes, and the end result is that the DSP receives an {\bf auction-result} tuple $(u,r,e,c,a,x)$ whose entries $u,r,e,c$ are from the bid-submission tuple, and 
+There would in general of course be several other entities (e.g., multiple DSPs) bidding for the same bid request $r$ from the exchange $e$, and the exchange conducts an auction to determine the winner. The auction process is a black box for our purposes, and the end result is that the DSP receives an {\bf auction-result} tuple $(u,r,e,c,a,x)$ whose entries $u,r,e,c$ are from the bid-submission tuple, and 
 \begin{itemize}
 	\item $x$ is the {\bf auction outcome}, a binary variable indicating whether the bid submission won the auction ($x= \text{Win})$ or not ($x=\text{Lose}$).
 	\item $a$ is the {\bf clearing price}, i.e. actual amount the DSP must pay the exchange (this is typically lower than the bid amount $b$ as most RTB auctions are some form of modified second-price auction). The specifics of the relation between $a$ and $b$ (i.e., the auction clearing mechanism) are not relevant to the measurement of causal ad-effectiveness which concerns us here.
 \end{itemize}
 
-Finally, if the DSP won the auction, it will serve an ad from campaign $c$ to the consumer $u$ using the session information associated with the bid request $r$, and log a record of the win. If it lost the auction, there is no action taken, other than possibl logging a record of the loss. 
+Finally, if the DSP won the auction, it will serve an ad from campaign $c$ to the consumer represented by identifier $u$ using the session information associated with the bid request $r$, and log a record of the win. If it lost the auction, there is no action taken, other than possibly logging a record of the loss. 
 
 
 \subsection{Logging}
 
-In order to be able to optimize the operation of all aspects of a DSP (including determination of optimal bid prices, implementing targeting, etc.), it is essential that the system conducts {\em logging} of not only of bidding events but also of consumer behaviors, via suitably placed tracking mechanisms (also known as "beacons" or "pixels") on advertiser website, mobile apps, and other digital properties. Machine learning algorithms can make use of such logs to improve the efficacy of the DSP algorithms over time. It turns out that logging is also crucial for measuring the causal effect of ads. 
+In order to be able to optimize the operation of all aspects of a DSP (including determination of optimal bid prices, implementing targeting, etc.), it is essential that the system conducts {\em logging} of not only of bidding events but also of consumer behaviors, via suitably placed tracking mechanisms (also known as "beacons" or "pixels") on advertiser websites, mobile apps, and other digital properties. Machine learning algorithms can make use of such logs to improve the efficacy of the DSP algorithms over time. It turns out that logging is also crucial for measuring the causal effect of ads. 
 
 We assume the existence of 3 logs:
 \begin{itemize}
 	\item {\bf Bid Opportunity Logs}: When the DSP receives a bid opportunity, a log is created containing the tuple $BidOpp(u, t, r, e)$, where $u$ is the userID, $t$ is the time-stamp, $r$ is the bid request ID, and $e$ is the exchange ID. In general of course the number of bid opportunities seen daily can easily run into the hundreds of billions, and could be prohibitively large to store fully, so we assume here only the ability to ingest the stream of bid opportunities and store what we need.
-	\item {\bf Impression logs}: When the DSP serves an ad for a campaign $c$ at time $t$ in response to a bid request (if it won the auction) for userID $u$, a log is creatd containing the tuple $Imp(u,t,c)$. Typically impression logs can contain a variety of other variables (especially relevant to ML algorithms) but those are ignored in the present discussion.
+	\item {\bf Impression logs}: When the DSP serves an ad for a campaign $c$ at time $t$ in response to a bid request (if it won the auction) for userID $u$, a log is created containing the tuple $Imp(u,t,c)$. Typically impression logs can contain a variety of other variables (especially relevant to ML algorithms) but those are ignored in the present discussion.
 	\item {\bf Event logs}: When a userID $u$ performs a conversion action (e.g., a purchase on a suitably instrumented mobile app or web-page) relevant to a specific campaign $c$ at time $t$, a log is created containing the tuple $Ev(u, t, c)$. Essentially, we are logging the fact that userID $u$ had a "response" relevant to campaign $c$, and crucially, $u$ may not actually have been exposed to an ad from campaign $c$. Here we only consider actions relevant to defined campaign goals, and ignore other events.
 \end{itemize}
 
@@ -462,7 +463,7 @@ The basic idea is simple (see Figure \ref{fig-post-bid}):
 A "random" (in the sense below) fraction $p$ of userIDs who are {\em about to see an ad} for campaign $c$ (i.e., where the DSP has won the auction), are instead shown a PSA (Public Service Announcement) ad\footnote{Alternatively, these consumers could be shown no ad at all, which would leave the methodology and results here unchanged, but in practice once a buyer wins an auction they are compelled by publisher to produce some ad, lest the page redner a blank box which would constitute a poor user experience.} that is unrelated to campaign $c$ (and assumed to have no impact on the campaign's desired outcome). The $(1-p)$ fraction who are exposed to the campaign are called the Test group, and the fraction $p$ who receive PSA ads are called the Control group.
 \end{definition}
 
-It is important to realize that the Test/Control assignment is assuemd for now to be a function of the userID only, i.e., a userID is either a Test or a Control userID. So if the same userID appears multiple times in different bid requests, it will either always be in the Test group or always be in the Control group. This of course does not necessarily describe the state of affairs in reality, but we shall introduce an approach to address this complication in Section \ref{sec-contam}.
+It is important to realize that the Test/Control assignment is assumed for now to be a function of the userID only, i.e., a userID is either a Test or a Control userID. So if the same userID appears multiple times in different bid requests, it will either always be in the Test group or always be in the Control group. 
 
 The Test/Control assignment can be accomplished by picking a suitable {\em deterministic} uniform hash function $h_k(u)$ that maps a userID $u$ to a $k$-digit decimal number, and determine Test/Control assignment based on the last few digits. The hash function is uniform in the sense that if we pick a random userID $u$, then $h_k(u)$ is uniformly distributed over the range $0$ to $10^k-1$. For example, if the holdout fraction $p = 10\%$,  then we can map any userID $u$ that has $h_k(u)$ ending in 0 to Control, and otherwise to Test. Since the hash function values are uniformly distributed, and the last digit of $h_k(u)$ is equally likely to be any of the 10 decimal digits, we will have mapped roughly 10\% of userIDs to Control. Note that we are not actually doing any explicit randomization. Instead, we are only assuming that the userIDs are independent of their potential outcomes (and hence the Individual Causal Effect, ICE), which is a very reasonable assumption. Since Test/Control assignment depends only on the userID via the hash function, it then follows that the Test/Control assignment is ignorable when estimating causal effects. In this sense, we can think of Test/Control assignment as being essentially random over userIDs.  
 
@@ -533,7 +534,12 @@ which gives estimates of the Test and Control group response rates as $R_T = E[Y
 
 
 \subsection{Wasted Spend in Post-Bid Randomization}
-While the post-bid randomization idea is simple to implement and leads to a statistically sound estimation of the causal effect, it has one big drawback: since the Test/Control assignment is done {\em after} placing a bid, the advertiser must pay for the won impression, regardless of whether the consumer is served an actual campaign ad, or a PSA ad. Thus if the holdout fraction is 10\%, the advertiser essentially wastes 10\% of their ad budget on PSA ads, which in turn hurts campaign ROI by a correspoding amount. Moreover, given the low absolute value of typical response rates, larger holdout fractions may sometimes be required to improve measurement significance. Considering that annual digital advertising budgets for large advertiser can easily run into the 10s or even 100s of millions of dollars, this is a significant problem. Motivated by this consideration, we have designed a {\em pre-bid randomization} scheme, and a methodology to estimate $ATT$ under that scheme, which does away with the need to spend money on bids won against the control group. We describe this in detail in the following sections.
+While the post-bid randomization idea is simple to implement and leads to a statistically sound estimation of the causal effect, it has one big drawback: 
+since the Test/Control assignment is done {\em after} placing a bid, the advertiser must pay for the won impression, regardless of whether the consumer is served an actual campaign ad, or a PSA ad. 
+Thus if the holdout fraction is 10\%, the advertiser essentially wastes 10\% of their ad budget on PSA ads, which in turn hurts campaign ROI by a correspoding amount. 
+Moreover, given the low absolute value of typical response rates, larger holdout fractions may sometimes be required to improve measurement significance. 
+Considering that annual digital advertising budgets for large advertisers can easily run into the 10s or even 100s of millions of dollars, this is a significant problem. 
+Motivated by this consideration, we have designed a {\em pre-bid randomization} scheme, and a methodology to estimate $ATT$ under that scheme, which does away with the need to spend money on bids won against the control group. We describe this in detail in the following sections.
 
 
 \section{Pre-Bid Randomization} \label{sec-prebid}
