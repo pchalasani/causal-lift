@@ -585,7 +585,7 @@ It is worth making a few remarks about the Pre-Bid Randomization procedure. In P
 
 The meanings of the various types of impressions logged are:
 \begin{itemize}
-	\item Phantom control impression $Imp(t, u, c_0, C)$ indicates that at time $t$, a bid was about to be submitted for userID $u$, but was not submitted because $u$ is a Control userID, i.e. $H(u,p) = C$.
+	\item Phantom control impression $Imp(t, u, c_0, C)$ indicates that at time $t$, a bid was about to be submitted for userID $u$ (on behalf of campaign $c_0$), but was not submitted because $u$ is a Control userID, i.e. $H(u,p) = C$.
 	\item Test-Win impression $Imp(t, u, c_0, TW)$ indicates that at time $t$ the DSP {\em won} a bid submitted to the exchange on behalf of campaign $c_0$, and the Test userID $u$ is {\em exposed} to a campaign $c_0$ ad.
 	\item Phantom Test-Loss impression $Imp(t, u, c_0, TL)$ indicates that at time $t$ the DSP \textit{lost} a bid submitted to the exchange on behalf of campaign $c_0$, and the Test userID $u$ is {\em not exposed} to a campaign $c_0$ ad.
 \end{itemize}
@@ -605,8 +605,8 @@ Under Post-Bid Randomization, our reasoning in estimating the $ATT$ was the foll
 	\item Assignment to Test/Control is exactly the same as exposure/non-exposure: a userID is exposed to an ad {\em if and only if} it is a Test userID,
 	\item $E[Y(1) \,|\, W=1]$ is observable, as the response rate of Test (i.e., exposed) userIDs.
 	\item Assignment to Test/Control is purely based on the userID $u$ (via the hash function $h_k(u)$), and the userID has nothing to do with its potential outcomes,
-	\item therefore exposure is \textit{ignorable} with respect to potential outcomes (Definition \ref{def-ignor}), or informally, the exposed (i.e. Test) and unexposed (i.e. Control) populations are "statistically equivalent" (with regard to potential response outcomes), and 
-	\item this in turn implies (using Proposition \ref{prop-ignor}) that the counterfactual expectation $E[Y(0)|W=1]$ equals the observable response rate of Control userIDs, $E[Y(0)|W=0]$. 
+	\item Therefore exposure is \textit{ignorable} with respect to potential outcomes (Definition \ref{def-ignor}), or informally, the exposed (i.e. Test) and unexposed (i.e. Control) populations are "statistically equivalent" (with regard to potential response outcomes), and 
+	\item This in turn implies (using Proposition \ref{prop-ignor}) that the counterfactual expectation $E[Y(0)|W=1]$ equals the observable response rate of Control userIDs, $E[Y(0)|W=0]$. 
 \end{enumerate}
 
 
@@ -682,7 +682,7 @@ Figure \ref{fig-prebid-flow} shows the various populations involved in the pre-b
 In this context, the earlier definitions of the $ICE$ (Individual Causal Effect), $ACE$ (Average Causal Effect) and $ATT$ are similar, except that we use the treatment-assignment variable $Z_i$ in place of $W_i$ as the argument of the $Y_i(.)$ and we use $U_i$ in place of $W_i$ as the conditioning variable in the conditional expectations.
 
 \begin{definition}\label{def-ice-noncomp}
-	textbf{Individual Causal Effect ($ICE$) Under Non-Compliance:} The potential outcome of a userID $u_i$ if it were assigned to Test, minus the potential outcome if it were assigned to Control:
+	\textbf{Individual Causal Effect ($ICE$) Under Non-Compliance:} The potential outcome of a userID $u_i$ if it were assigned to Test, minus the potential outcome if it were assigned to Control:
 \begin{equation}
 ICE_i = Y_i(1) - Y_i(0) \label{eq-ice-noncomp}	
 \end{equation}
@@ -714,7 +714,7 @@ ATT & =  E_i[ ICE_i | U_i = 1]   \nonumber \\
 This definition of $ATT$ conditions on exactly the right population: the winner types, with $U=1$. This is precisely the population that \textit{would} be exposed to ads \textit{if} they were assigned to Test, and the average response rate would be $R_{TW} = E[Y(1)| U=1]$. Similarly this population would \textit{not} be exposed if assigned to Control, and the average response rate would be $R'_{CW} = E[Y(0)|U=1]$. There is, however, a problem: the user type $U$ is \textit{not observable} for Control userIDs, so $R'_{CW}$ is not directly observable! Nevertheless, we can compute the $ATT$, thanks to a series of known properties and results (see, e.g., \cite{Little_Causal_2000}):
 
 We begin with a straightforward property:
-\begin{proposition} \label{prop-rtl-rcl}
+\begin{proposition} \label{prop-rtl-rcl}\small
 Under Pre-Bid Randomization, the average response rate of loser-type userIDs assigned to Test and Control are the same, i.e. $E[Y(1) | U=0] = E[Y(0) | U=0]$, or $R_{TL} = R'_{CL}$.
 \begin{proof}
 This follows from the fact that (a) loser-type userIDs are not exposed to ads, whether they are assigned to Test or Control, and (b) Test/Control assignment is purely random and hence ignorable, i.e., it has no influence on potential outcomes under non-exposure.
@@ -730,7 +730,7 @@ Note that $P(U=1) = E(U)$, the average value of the user type $U$ across the pop
 \end{proof}
 \end{lemma}
 
-\begin{lemma} \label{lem-att-prebid}
+\begin{lemma} \label{lem-att-prebid}\small
 	In the Pre-Bid Randomization setting, the $ATT$ is the ratio of two observable averages:
 \begin{equation}
 ATT = ACE/P(U=1) = ACE/w = (R_T - R_C)/w, 	\label{eq-att-prebid}
@@ -741,7 +741,7 @@ E[Y(1) - Y(0) | U=1] = E[Y(1) - Y(0)]/P(U=1), 	\label{eq-att-prebid-expec}
 \end{equation}
 
 
-\begin{proof}
+\begin{proof}\small
 We can decompose the $ACE$ (Def. \ref{def-ace-noncomp}) as a sum of two terms:
 \begin{eqnarray}
 ACE &= & E[ Y(1) - Y(0) ] \; = \; R_T - R_C \\
@@ -776,7 +776,7 @@ INC &= & (R_{TW} - R'_{CW})/R_{TW}\\
 In other words, $INC$ answers the question, \textit{what fraction of the exposed Test response rate is caused by the ad campaign}, and is therefore necessarily bounded by 1.0 (unlike the $ATL$, which has no upper bound). 
 Both the $ATL$ and $INC$ are straightforward functions of $R_{TW}$ and $ATT$:
 
-\begin{lemma} \label{lem-atl-inc}
+\begin{lemma} \label{lem-atl-inc}\small
 Under Pre-Bid Randomization, the $ATL$ is given by:
 \begin{equation} \label{eq-atl}
 ATL = ATT/(R_{TW} - ATT).
@@ -802,18 +802,16 @@ We note that for our methodology it is crucial that the DSP is able to log bid o
  
 \subsection{Assumptions about the Test and Control Groups}
 
-I EDITED THIS SECTION HEAVILY IN TERMS OF THE ACTUAL PRINCIPLES. PLEASE REVIEW!
+For this discussion, suppose advertiser $A$ is measuring the effectiveness of campaign $c_0$ on the DSP $D$. For brevity, we will say a campaign $c_1$ is \textit{related} to campaign $c_0$, if exposure to $c_1$ has an influence on a consumer's likelihood of performing campaign $c_0$'s desired outcome. In particular, campaign $c_0$ is of course related to itself. 
 
-For this discussion, suppose advertiser $A$ is measuring the effectiveness of campaign $c_0$ on the DSP $D$. For brevity, we will say a campaign $c_1$ is \textit{related} to campaign $c_0$, if $c_1$ has an influence on a consumer's likelihood of performing campaign $c_0$'s desired outcome. In particular, campaign $c_0$ is of course related to itself. 
-
-In general, it is possible that consumers in both the Test and Control groups of campaign $c_0$ are exposed to ads from related campaigns by Advertiser $A$, either from the DSP $D$ in question, from another DSP executing ads for $A$ in digital channels, or from advertising by $A$ in non-digital channels (e.g., traditional TV, print, radio, etc.). If exposure from such related campaigns is effectively random, in the sense that userIDs in Test and Control for campaign $c_0$ are equally likely to be exposed to related campaigns, and moreover that winner types and loser types in both groups are equally likely to be exposed to related campaigns, then the methodology presented here for measuring $ATL$ and $INC$ remains intact, but with two qualifications:
+In general, it is possible that consumers in both the Test and Control groups of campaign $c_0$ are exposed to ads from related campaigns by Advertiser $A$, either from the DSP $D$ in question, from another DSP executing ads for $A$ in digital channels, or from advertising by $A$ in non-digital channels (e.g., traditional TV, print, radio, etc.). Since Test/Control assignment is specifically with respect to campaign $c_0$, exposure from such related campaigns is effectively random, in the sense that userIDs in Test and Control groups (and in particular the winner-types in these groups) for campaign $c_0$ are equally likely to be exposed to those related campaigns. Thus the methodology presented here for measuring $ATL$ and $INC$ remains intact, but with two qualifications:
 
 \begin{itemize}
 	\item The interpretation of Control as a baseline corresponding to "no ad exposure" and Ad Lift relative to that "zero" baseline is no longer accurate. Instead, both the Control and Test groups are affected, in identical fashion, by related campaigns that effectively introduce a non-zero baseline of response against which Ad Lift is measured, i.e., they are simply boosting the baseline. 
-	\item The interpretation of Ad Lift and Incrementality is then understood to be not "the causal impact of camapign $c_0$ in the absence of all other advertising" but rather "the causal impact of camapign $c_0$ against the background of all related advertising." Presumably, the latter is smaller in magnitude than the former\footnote{The causal impact of camapign $c_0$ in the absence of all other advertising isn't knowable in practice, as it would require an experiment that involved shutting of all related advertising in all channels, waiting for it's lagged effect to subside, and running only a single campaign.}, but the latter is all that matters as it represents the real-world impact of campaign $c_0$. The methodology described here correctly quantifies the correpsonding Ad Lift, and is the correct quantity againsy which the advertiser should measure the impact if campaign $c_0$. 
+	\item The interpretation of Ad Lift and Incrementality is then understood to be not "the causal impact of campaign $c_0$ in the absence of all other advertising" but rather "the causal impact of campaign $c_0$ against the background of all related advertising." Presumably, the latter is smaller in magnitude than the former\footnote{The causal impact of campaign $c_0$ in the absence of all other advertising isn't knowable in practice, as it would require an experiment that involved shutting of all related advertising in all channels, waiting for it's lagged effect to subside, and running only a single campaign.}, but the latter is all that matters as it represents the real-world impact of campaign $c_0$. The methodology described here correctly quantifies the corresonding Ad Lift, and is the correct quantity against which the advertiser should measure the impact if campaign $c_0$. 
 \end{itemize}
 
-In fact, the effective baseline for $c_0$ isn't only affected by related digital and non-digital ad campaigns by Advertiser $A$. The likelihood of consumers to exhibit the desired outcome for campaign $c_0$ is also impacted by by related advertising from $A$'s competitors, by so-called earned media (i.e., what consumers are saying about $A$'s products or services in social media), by seasonality, macro-economic conditions, and myriad other factors. Again, as long as these factors do not systematically affect Test and Control groups for $c_0$ in different ways, they merely serve to determine the (non-zero) Control baseline, and the methodology here pertains. 
+In fact, the effective baseline for $c_0$ isn't only affected by related digital and non-digital ad campaigns by Advertiser $A$. The likelihood of consumers to exhibit the desired outcome for campaign $c_0$ is also impacted by  related advertising from $A$'s competitors, by so-called earned media (i.e., what consumers are saying about $A$'s products or services in social media), by seasonality, macro-economic conditions, and myriad other factors. Again, as long as these factors do not systematically affect Test and Control groups for $c_0$ in different ways, they merely serve to determine the (non-zero) Control baseline, and the methodology here pertains. 
 
 Given that the assignment of userIDs to Test and Control is effectively random (as discussed in Section \ref{sec-psa}, based on the hash function $h_k(u)$ as applied to userIDs within DSP $D$), it is reasonable to assume that such factors pose no issue, as they would impact Test and Control in statistically equivalent fashion. It is difficult (though perhaps not impossible) to imagine how external factors, including related campaigns, could result in different \textit{systematic} variation of response between Test and Control (though they can certainly introduce \textit{statistical} variation, i.e., noise). However, given that the Test/Control assigment happens within the DSP, it is possible that some issue internal to the DSP $D$ in question could be causing related campaigns executed by $D$ to introduce some systematic effect, contaminating the results\footnote{Even more problematic would be if the advertiser were to duplicate the {\em exact same} campaign, either on DSP $D$ or another DSP. This could pose additional complications, but we do not address those here. In practice, we do not observe advertisers engaging in this behavior; they may run different campaigns with different DSPs, or run disjoint parts of the same campaign on different DSPs (e.g., running display ads with one DSP and mobile ads with another), but we have not observed many instances of the same advertiser running the exact same campaign on multiple DSPs.}.
 %	\item The same advertiser $A$ running a \textit{related} campaign (same or different from $c_0$) on a \textit{different DSP} could win this bid request. 
@@ -832,7 +830,7 @@ Given that the assignment of userIDs to Test and Control is effectively random (
 
 %\todo{Modify this based on Ari's comments}
 
-To account for this, we recommend the following practices be followed when measuring the effectiveness of campaign $c_0$ of advertiser $A$ on DSP $D$:
+To mitigate the impact of these issues, we recommend the following practices be followed when measuring the effectiveness of campaign $c_0$ of advertiser $A$ on DSP $D$:
 
 %\begin{assumption}
 %	\textbf{Exclusivity:} Suppose DSP $D$ is measuring the effectiveness of campaign $c_0$ of advertiser $A$. We assume that:
@@ -859,7 +857,7 @@ The equations for the point estimates of these effects (Eqs. \ref{eq-att-noncomp
 For example \cite{Imbens1997a} presents an estimate of the standard deviation of the posterior distribution of the $ATT$ under a large-sample normal approximation. 
 However this approach cannot be extended to the $ATL$.
 
-We have developed a methodology to compute confidence bounds for both metrics (or any other similarly-defined metric) based on a simple Gibbs sampling scheme. Such schemes were proposed for example by \cite{Chickering1996} and \cite{Barajas2012}, but we believe our methodology, as well as its presentation, is simpler and more intuitive to understand. Moreover, unlike the estimation of \cite{Imbens1997a}, our methodology is relatively assumption-free, works for non-large samples, and does not rely on a normal approximation.
+We have developed a methodology to compute confidence bounds for both metrics (or any other similarly-defined metric) based on a simple Gibbs sampling scheme. Such schemes were proposed for example by \cite{Chickering1996} and \cite{Barajas2012}, but we believe our methodology, as well as its presentation, is simpler and more intuitive to understand. Moreover, unlike the confidence-interval estimation of \cite{Imbens1997a}, our methodology is relatively assumption-free, works for non-large samples, and does not rely on a normal approximation.
 
 \subsection{Basic Ideas}
 
@@ -1009,7 +1007,8 @@ For a given Test userID, we might say that a bid opportunity is in $TW$ if the b
 This means the potential outcomes $Y(0), Y(1)$ subsequent to the second bid opportunity would not be those that one would expect from an unexposed consumer. 
 In the extreme case, if the gap $\delta$ between the first and second bid opportunities is close to zero, it is quite likely that the "if-unexposed potential outcome" $Y(0)$ is identical to $Y(1)$, i.e., \textit{regardless of whether the second bid opportunity results in a win or not}, the two potential outcomes are \textit{identical}. This extreme case is actually quite likely in practice, corresponding for example to consecutive bid opportunities that might occur as a consumer clicks through from one page of a website to another.
 
-Thus, if we treat each bid opportunity as a unit, there will be interference among units in the sense that the potential outcomes of a unit would depend on whether or not other units were exposed. This violates a fundamental requirement that underlies the potential outcomes framework, called the Stable Unit Treatment Value Assumption (SUTVA), \cite{Rubin_Causal_2005}. To avoid violating the SUTVA, instead of treating each individual bid opportunity of a userID as a unit, we make the following modification to our methodology:
+Thus, if we treat each bid opportunity as a unit, there will be interference among units in the sense that the potential outcomes of a unit would depend on whether or not other units were exposed. This violates a fundamental requirement that underlies the potential outcomes framework, called the Stable Unit Treatment Value Assumption (SUTVA), \cite{Rubin_Causal_2005}. This assumption states, roughly speaking, that the potential outcomes of a unit do not depend on the exposure-status of another unit (and so the SUTVA is informally referred to as the "no-interference" assumption). This assumption was not explicitly called out in our analysis thus far because we have been assuming that each userID occurs exactly once, and hence it is very reasonable to assume no interference between units (i.e. userIDs) in that scenario.
+To avoid violating the SUTVA, instead of treating each individual bid opportunity of a userID as a unit, we make the following modification to our methodology:
 
 \begin{modification}[Treat UserID as a Unit]
 Treat the userID itself as a unit, which effectively means that each "unit" now represents the set of \textit{all} bid opportunities that have a given userID. 
