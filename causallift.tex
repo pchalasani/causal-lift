@@ -122,7 +122,7 @@ provides a careful, self-contained, highly-readable, readily-implementable treat
 
 \section{Introduction}
 
-As global digital advertising budgets continue to grow, overtaking TV as the dominant form of advertising \cite{emarketer.com_2016},
+As global digital advertising budgets continue to grow, overtaking TV as the dominant form of advertising \cite{emarketer-2016},
 the problem of measuring the \textit{effectiveness} of ad campaigns is ever-important: 
 advertisers want to ensure the budgets they spend on ad campaigns across search, display, mobile, video, social, email, and other digital channels are truly responsible for driving desired consumer behaviors. In particular, they want to understand not just what consumer behaviors and business outcomes occurred \textit{after}exposure to advertising, but rather what occurred \textit{because} of exposure to advertising, i.e., the true causal impact.
 
@@ -183,7 +183,6 @@ Any quantification of ad effectiveness must specify a {\em desired outcome} that
 \begin{question}
 What is the impact of {\em exposure to my ad campaign} in driving my {\em desired outcome}? 	
 \end{question}
-
 
 
  
@@ -320,7 +319,7 @@ In other words, the difference in observed response rates between exposed and un
 When there is a large selection bias, $S$ is not a good estimate of $ATT$ because the average observed response rate of unexposed consumers is a poor substitute for the counterfactual $E[ Y(0)|W=1 ]$. An example is shown in Fig. \ref{fig-att-bias}.
 
 \begin{figure}\centering
-\includegraphics[width=0.7\textwidth,angle=270]{selection-bias.pdf}
+\includegraphics[width=0.9\textwidth]{selection-bias.pdf}
 \caption{\small Selection bias and $ATT$. The height of each bar represents the expected value of a potential outcome $Y(0)$ or $Y(1)$ for a population.
  The left pair of bars correspond to the unexposed population, $W=0$, and the right pair of bars correspond to the exposed population, $W=1$. 
  The Standard Estimator is a measure one would naively use to attempt to measure causal effect, i.e. the difference between the two observable average outcomes. 
@@ -1101,7 +1100,7 @@ Other authors have explored the quantitative impact of ID contamination in detai
 \end{enumerate}
 
 \begin{figure}\centering
-\includegraphics[width=0.7\textwidth,angle=270]{contam-dilution.pdf}
+\includegraphics[width=0.9\textwidth]{contam-dilution.pdf}
 \caption{\small A simple cross-device contamination scenario where each consumer has exactly three devices, and each device (represented by a circle) is randomly assigned to Control with probability $p$ (and to Test with probability $1-p$). The device distributions of three consumers are shown. Each row of devices is associated with a distinct consumer. The two Response Rate columns show the response rates of the consumer, and that of each device of the consumer.}
 \label{fig-contam-dilution}
 \end{figure}
