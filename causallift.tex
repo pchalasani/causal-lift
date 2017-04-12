@@ -758,7 +758,8 @@ Advertisers are often interested in a variant of the $ATT$ that measures the cha
 	\textbf{Average Treatment Lift (ATL):} 
 \begin{eqnarray}
 ATL &= & (R_{TW} - R'_{CW})/R'_{CW}\\
-    &= & ATT/R'_{CW} 	\label{eq-lift}	
+    &= & ATT/R'_{CW}\\
+    &= & ATT/(R_{TW} - ATT) \label{eq-atl}	
 \end{eqnarray}
 \end{definition}
 
@@ -768,27 +769,11 @@ The $ATL$ will be informally referred to as the \textit{Causal Lift}, or \textit
 	\textbf{Incrementality (INC):} 
 \begin{eqnarray}
 INC &= & (R_{TW} - R'_{CW})/R_{TW}\\
-    &= & ATT/R_{TW} 	\label{eq-lift}	
+    &= & ATT/R_{TW} 	\label{eq-inc}	
 \end{eqnarray}
 \end{definition}
 
-In other words, $INC$ answers the question, \textit{what fraction of the exposed Test response rate is caused by the ad campaign}, and is therefore necessarily bounded by 1.0 (unlike the $ATL$, which has no upper bound). 
-Both the $ATL$ and $INC$ are straightforward functions of $R_{TW}$ and $ATT$:
-
-\begin{lemma} \label{lem-atl-inc}\small
-Under Pre-Bid Randomization, the $ATL$ is given by:
-\begin{equation} \label{eq-atl}
-ATL = ATT/(R_{TW} - ATT).
-\end{equation}
-\begin{equation} \label{eq-inc}
-INC = ATT/R_{TW}.
-\end{equation}
-
-\begin{proof}
-Recall from the definition of $ATT$ (Eq. \ref{eq-att-noncomp}) that $ATT = R_{TW} - R'_{CW}$, so $R'_{CW} = R_{TW} - ATT$, and the result follows from the definition of $ATL$ (Eq. \ref{eq-lift}).
-\end{proof}	
-\end{lemma}
-
+In other words, $INC$ answers the question, \textit{what fraction of the exposed Test response rate is caused by the ad campaign}, and is therefore necessarily bounded by 1.0 (unlike the $ATL$, which has no upper bound). From the above definitions we see that both the $ATL$ and $INC$ are straightforward functions of $R_{TW}$ and $ATT$.
 
 
 \subsection{Measuring Response Rates from Impression and Event Logs}
@@ -852,7 +837,7 @@ Until now we have been only concerned with \textit{point estimates} of various t
 The difficulty in obtaining confidence bounds depends on which type of causal effect we are considering. 
 We are mainly interested in the $ATT$ (Def. \ref{def-att-noncomp}) and the 
 $ATL$ (the Average Treatment Lift, Def. \ref{def-lift}). 
-The equations for the point estimates of these effects (Eqs. \ref{eq-att-noncomp} and \ref{eq-lift} respectively) involve various uncertain response rates and the win rate $w$. 
+The equations for the point estimates of these effects (Eqs. \ref{eq-att-noncomp} and \ref{eq-atl} respectively) involve various uncertain response rates and the win rate $w$. 
 For example \cite{Imbens1997a} presents an estimate of the standard deviation of the posterior distribution of the $ATT$ under a large-sample normal approximation. 
 However this approach cannot be extended to the $ATL$.
 
@@ -1217,7 +1202,7 @@ The practical justification for this modification is twofold:
 \item The larger the value of $k$, the more likely it is that each CID has connected most or all of the userIDs corresponding to a consumer, i.e., the more confident one can be in the CID solution's ability to correctly associate userIDs to CIDs.
 \end{enumerate}
 
-Clearly there is a tradeoff with this approach: for higher $k$ we will have less data, resulting in wider confidence bounds around the measured lift. In practice, we have found the best results for $k=2$ or $k=3$, which produce noticeably different results vs. $k=1$. This is consistent with empirical studies (e.g., \cite{coey2016people}) showing that a vast majority ($> 70\%$) of consumers have fewer than 4 cookies, and that digital consumers own, on average, about 3.5 connected devices \cite{emarketer.com_2016}
+Clearly there is a tradeoff with this approach: for higher $k$ we will have less data, resulting in wider confidence bounds around the measured lift. In practice, we have found the best results for $k=2$ or $k=3$, which produce noticeably different results vs. $k=1$. This is consistent with empirical studies (e.g., \cite{coey2016people}) showing that a vast majority ($> 70\%$) of consumers have fewer than 4 cookies, and that digital consumers own, on average, about 3.5 connected devices \cite{emarketer-2016}
 though most of their media consumption (and hence ad exposure) occurs on 2 or 3 devices (e.g., smartphones, laptop, and tablets, as opposed to gaming consoles, wearables, etc.). Thus, using $k=2$ or $k=3$ helps prevent ID contamination from overwhelming lift measurements, avoiding singletons and gearing the analysis around the empirically expected value for $k$.
 
 We believe that the issues discussed in this paper - notably around ID contamination and win bias - have severely hampered previous attempts to measure Ad Lift. In MediaMath's experience, having observed many dozens if not hundreds of attempted measurements, spanning different advertiser verticals and different campaigns configurations, the results routinely come back indicating marginal lift, no lift, or negative lift. These results (in particular negative lift), run counter to common-sense expectations about the impact of advertsing, and fly in the face of many bilions of dollars of ad spend. The few tests that we have seen produce strong, postive lift tended to do so only for short-periods of time, quickly falling back into the noise. We believe this is because those appraoches, unlike the current work, do not account for real-world constraints and complications. In the next Section, we present Ad Lift measurements using the methodology presented here, which yields significant, positive, and stable measurements.
