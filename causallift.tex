@@ -139,7 +139,7 @@ This precludes certain solutions that exist in the literature, such as Ghost ads
 Another constraint is that the simplest possible way of measuring ad-impact, namely, randomizing the ad opportunity to test/control \textit{after winning} the ad auction, is unacceptable to most advertisers because they have already paid for the winning bid, and hence would be wasting significant ad spend if the opportunity were assigned to the control group. 
 To address this concern, our methodology instead randomizes \textit{before bid submission}, and this introduces the complication that not every consumer in the test group is exposed to the ad (since some bids would lose in the auction). 
 This phenomenon is known as \textit{non-compliance} in the clinical trials literature (where certain people in the test group do not take the drug being studied). 
-Non-compliance complicates causal ad-impact measurement because consumers in the test group who are not exposed to ads may have systematically different response profiles than those who were exposed. This again owes to auction dynamics: unexposed consumers are those for the whom the DSP was outbid in the auction, presumably because another buyer thought that consumer was more valuable (i.e., responsive). We refer to the systematic difference in response between exposed and unexposed consumers in the test group as “win bias” and develop a methodology that builds upon some ideas from the clinical trials literature, adapting them to the advertising context in a manner that solves for win bias.
+Non-compliance complicates causal ad-impact measurement because consumers in the test group who are not exposed to ads may have systematically different response profiles than those who were exposed. This again owes to auction dynamics: unexposed consumers are those for whom the DSP was outbid in the auction, presumably because another buyer thought that consumer was more valuable (i.e., responsive). We refer to the systematic difference in response between exposed and unexposed consumers in the test group as “win bias” and develop a methodology that builds upon some ideas from the clinical trials literature, adapting them to the advertising context in a manner that solves for win bias.
 
 In addition to merely producing a \textit{point estimate} of causal impact, it is also important to compute a suitable \textit{confidence interval} around that estimate. We adopt and simplify a Gibbs-sampling-based scheme from the causal analysis literature (specifically \cite{Chickering1996}) to compute this confidence interval. This paper presents a self-contained introduction to Gibbs-Sampling and is the first to describe a readily-implementable algorithm applying this technique to the problem of estimating confidence intervals on the causal effect. 
 
@@ -1270,7 +1270,7 @@ All of the various response rates, and $ATT$ (which is a difference in response 
 
 \begin{sidewaystable}[!h] 
 \small
-\caption{\small Causal Lift ($ATL$) measurement results, along with various related computations and intermediate values, for nine campaigns over a 30-day period ending on March 21, 2017.}
+\caption{\small Causal Lift ($ATL$) measurement results, along with various related computations and intermediate values, for seven campaigns over a 30-day period ending on March 21, 2017.}
 \label{tab-results}
 \begin{tabular}{|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|}
 \hline
@@ -1283,6 +1283,7 @@ id & ATL & INC & ATT & gConf & g5  & g50 & g95  & $R_T$   & $R_C$   & $R_{TW}$  
 5   & 153 & 60  & 6   & 94    & -11 & 109 & 1317 & 4    & 3    & 9    & 15 & 2,409,520 & 902    & 364,234 & 343   & 110,991 & 32    \\
 6   & 5   & 5   & 46  & 100   & 3   & 5   & 8    & 629  & 610  & 887  & 40 & 1,955,475 & 122,968 & 787,613 & 69,874 & 205,131 & 12,520 \\
 7   & 12  & 11  & 1   & 65    & -23 & 9   & 72   & 2    & 2    & 6    & 24 & 2,833,414 & 511    & 681,506 & 380   & 198,932 & 33    \\
+\hline
 \end{tabular}
 \end{sidewaystable}
 
