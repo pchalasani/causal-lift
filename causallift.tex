@@ -1154,12 +1154,9 @@ Yet, the situation is even worse than that! In the above scenario, zero (or extr
 \item the baseline (no-exposure) response rate of multiple-device consumers is higher than that of single-device consumers. This phenomenon is at least partially attributable to the fact that consumers with multiple devices are more "prolific" (and perhaps more affluent) internet users and as such tend to perform conversion actions at a higher rate than single-device consumers, even in the absense of any advertising exposure.
 \end{enumerate}
 
-
-To emphasize the connection to devices, we use the term "device" in place of "cookie" in what follows.
-
 The following result shows a simple example where a non-constant device distribution can result in multi-device human users being over-represented in Control compared to Test.
 \begin{proposition}\small [Multi-Device Skew] \label{prop-md-skew}
-Consider a scenario where each device is randomly assigned to Control with probability $p$ (and to test with probability $1-p$). Suppose there are two kinds of human users: "1D users", i.e. those with just 1 device, and "2D users", i.e. those with exactly 2 devices. Let the random-variable $T_i$ represent the number of "$i$-D" human users with at least one cookie in Test, and $C_i$ represent the number of "$i$-D" human users with at least 1 cookie in Control. Then for a sufficiently large population-size the expected value of $C_2/C_1$ is $(2-p)/(1+p)$ times larger than the expected value of $T_2/T_1$, i.e. the ratio of 2D to 1D users in Control is $(2-p)/(1+p)$ times larger than the corresponding ratio in Test.
+Consider a scenario where each device is randomly assigned to Control with probability $p$ (and to test with probability $1-p$), and each consumer has exactly one cookie on each device (i.e., there are no cookie refreshes or deletions). Suppose there are two kinds of human users: "1D users", i.e. those with just 1 device, and "2D users", i.e. those with exactly 2 devices. Let the random-variable $T_i$ represent the number of "$i$-D" human users with at least one device in Test, and $C_i$ represent the number of "$i$-D" human users with at least 1 cookie in Control. Then for a sufficiently large population-size the expected value of $C_2/C_1$ is $(2-p)/(1+p)$ times larger than the expected value of $T_2/T_1$, i.e. the ratio of 2D to 1D users in Control is $(2-p)/(1+p)$ times larger than the corresponding ratio in Test.
 \end{proposition}
 \begin{proof}\small
 Suppose there are $N_1$ 1D human users, and $N_2$ 2D human users.
@@ -1168,7 +1165,8 @@ For each 1D human user, the chance that their device is in control is $p$. For e
 	E[C_1] &=& N_1 p\\
 	E[C_2] &=& N_2 (1 - (1-p)^2) = 2p - p^2,
 \end{eqnarray*}
-It is possible to show using a Taylor expansion (see, e.g. http://math.stackexchange.com/questions/60032/how-to-obtain-the-standard-deviation-of-a-ratio-of-independent-binomial-random-v) that for sufficiently large $N_1, N_2$, the expectation of the ratio $C_2/C_1$ can be closely approximated by the ratio of the expectations, i.e. 
+It is possible to show using a Taylor expansion (see, e.g., \cite{taylor-stack-exchange})
+that for sufficiently large $N_1, N_2$, the expectation of the ratio $C_2/C_1$ can be closely approximated by the ratio of the expectations, i.e. 
 \begin{eqnarray*}
 E[C_2/C_1] \simeq E[C_2]/E[C_1] = (N_2/N_1)(2p-p^2)/p = (N_2/N_1)(2-p).	
 \end{eqnarray*}
