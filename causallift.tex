@@ -107,17 +107,15 @@ The problem of measuring the true incremental effectiveness of a digital adverti
 With a large and increasing percentage of digital advertising delivered via Demand-Side-Platforms (DSPs) executing campaigns via Real-Time-Bidding (RTB) auctions and programmatic approaches, 
 a measurement solution that satisfies both advertiser concerns and the constraints of a DSP is of particular interest. 
 
-MediaMath (a DSP) has developed the first practical and statistically sound randomization-based methodology for true causal ad effectiveness measurement (or Ad Lift) by a DSP or similar buy-side digital advertising execution system. This methodology has been successfully deployed in production with several advertisers.
-In this paper we describe our solution and establish its soundness within the causal 
-framework of counterfactuals and potential outcomes. 
-The paper also presents a Gibbs-sampling procedure for estimating confidence intervals around the estimated Ad Lift. In addition, the paper presents solutions to several practical complications that are unique to the digital advertising setting, and which do not arise, for example, in a clinical trials context. 
-These complications arise in part from the fact that buy-side systems performing the necessary measurements do not have full control of the mechanisms through which digital advertising transacts (e.g., RTB auctions), and in part from the fact that digital advertising is delivered to consumers using devices and browsers that are tracked by identifiers (e.g., cookies, mobile advertising IDs, etc.) which may or may not be stable over time. One complication arising from the latter phenomenon is the repeated occurrence of identifiers, leading to interference among observations. Another is the fact that several identifiers can be associated with the same human user, leading to "contamination" with some of their identifiers being in the Test group and others being in the Control group. Complications such as these have severely impaired previous efforts to derive accurate measurements of lift in practice, and we present in detail proven methods to account for these issues.
+MediaMath (a DSP) has developed the first practical, production-deployed, statistically sound randomization-based methodology for true causal ad effectiveness (or Ad Lift) measurement by a DSP (or similar buy-side digital advertising execution system that may not have full control of underlying RTB auction mechanisms).
+We describe our solution and establish its soundness within the causal framework of counterfactuals and potential outcomes, and present a Gibbs-sampling procedure for estimating confidence intervals around the estimated Ad Lift. 
+We also address  practical complications (unique to the digital advertising setting) 
+that stem from the fact that digital advertising is delivered to consumers  tracked by identifiers (e.g., cookies, mobile advertising IDs) which may not be stable over time. One such complication is the repeated occurrence of identifiers, leading to interference among observations. 
+Another is due to several distinct identifiers being associated with the same human user, leading to "contamination" with some of their identifiers being assigned to the Treatment group and others to the Control group. 
+Complications such as these have severely impaired previous efforts to derive accurate measurements of lift in practice.
 
-In contrast to a few other papers discussing ad effectiveness methods for advertising, 
-this paper has an expository aim as well, and 
-provides a careful, self-contained, highly-readable, readily-implementable treatment of all relevant concepts, such as causal analysis with potential outcomes, and Gibbs Sampling.
-
-	
+In contrast to a few other papers on the subject, this paper has an expository aim as well, and 
+provides a rigorous, self-contained, highly-readable, readily-implementable treatment of all relevant concepts.
 \end{abstract}
 
 
