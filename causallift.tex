@@ -107,15 +107,15 @@ The problem of measuring the true incremental effectiveness of a digital adverti
 With a large and increasing percentage of digital advertising delivered via Demand-Side-Platforms (DSPs) executing campaigns via Real-Time-Bidding (RTB) auctions and programmatic approaches, 
 a measurement solution that satisfies both advertiser concerns and the constraints of a DSP is of particular interest. 
 
-MediaMath (a DSP) has developed the first practical, production-deployed, statistically sound randomization-based methodology for true causal ad effectiveness (or Ad Lift) measurement by a DSP (or similar digital advertising execution system that may not have full control of the underlying RTB auction mechanisms).
+MediaMath (a DSP) has developed the first practical, statistically sound randomization-based methodology for causal ad effectiveness (or Ad Lift) measurement by a DSP (or similar digital advertising execution system that may not have full control over the advertising transaction mechanisms).
 We describe our solution and establish its soundness within the causal framework of counterfactuals and potential outcomes, and present a Gibbs-sampling procedure for estimating confidence intervals around the estimated Ad Lift. 
 We also address  practical complications (unique to the digital advertising setting) 
-that stem from the fact that digital advertising is delivered to consumers  tracked by identifiers (e.g., cookies, mobile advertising IDs) which may not be stable over time. One such complication is the repeated occurrence of identifiers, leading to interference among observations. 
-Another is due to several distinct identifiers being associated with the same human user, leading to "contamination" with some of their identifiers being assigned to the Treatment group and others to the Control group. 
+that stem from the fact that digital advertising is targeted and measured via identifiers (e.g., cookies, mobile advertising IDs) that may not be stable over time. One such complication is the repeated occurrence of identifiers, leading to interference among observations. 
+Another is due to the possibility of multiple identifiers being associated with the same consumer, leading to "contamination" with some of their identifiers being assigned to the Treatment group and others to the Control group. 
 Complications such as these have severely impaired previous efforts to derive accurate measurements of lift in practice.
 
 In contrast to a few other papers on the subject, this paper has an expository aim as well, and 
-provides a rigorous, self-contained, highly-readable, readily-implementable treatment of all relevant concepts.
+provides a rigorous, self-contained, and readily-implementable treatment of all relevant concepts.
 \end{abstract}
 
 
